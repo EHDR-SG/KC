@@ -257,7 +257,7 @@
           </ul>
 
           <div class="hero__actions">
-            <a class="btn btn--primary" href="data:text/vcard;charset=utf-8;base64,QkVHSU46VkNBUkQKVkVSU0lPTjozLjAKTjpORztLQzs7OwpGTjpLQyBORwpPUkc6RXZlciBIaWdoZXIgRGF0YSBSZWNvdmVyeSBDZW50cmUgKEVIRFIpClRJVExFOkJ1c2luZXNzIERldmVsb3BtZW50IE1hbmFnZXIKVEVMO1RZUEU9V09SSyxWT0lDRTorNjUgODY2NiAyNzAxCkVNQUlMO1RZUEU9V09SSzprYy5uZ0AzdmVyaGlnaGVyLmNvbQpVUkw6aHR0cHM6Ly93d3cuM3ZlcmhpZ2hlci5jb20KQURSO1RZUEU9V09SSzo7OzIyMSBIZW5kZXJzb24gUm9hZCwgIzA2LTAyIChCbG9jayBBKTtTaW5nYXBvcmU7OzE1OTU1NztTaW5nYXBvcmUKTk9URTpXZSBMZWF2ZSBObyBEYXRhIEJlaGluZCAtIERhdGEgUmVjb3ZlcnkgU3BlY2lhbGlzdHMsIFNpbmdhcG9yZS4KRU5EOlZDQVJECg==" download="KC-NG.vcf">
+            <a id="saveContactBtn" class="btn btn--primary" href="#">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 19h16"/></svg>
               Save Contact Card
             </a>
@@ -350,6 +350,41 @@
     var now = new Date().getFullYear();
     document.getElementById('copyYear').textContent = now;
     document.getElementById('yearsActive').textContent = now - 2012;
+
+    var vcard = "BEGIN:VCARD\r\n" +
+      "VERSION:3.0\r\n" +
+      "N:NG;KC;;;\r\n" +
+      "FN:KC NG\r\n" +
+      "ORG:Ever Higher Data Recovery Centre (EHDR)\r\n" +
+      "TITLE:Business Development Manager\r\n" +
+      "TEL;TYPE=WORK,VOICE:+65 8666 2701\r\n" +
+      "EMAIL;TYPE=WORK:kc.ng@3verhigher.com\r\n" +
+      "URL:https://www.3verhigher.com\r\n" +
+      "ADR;TYPE=WORK:;;221 Henderson Road, #06-02 (Block A);Singapore;;159557;Singapore\r\n" +
+      "NOTE:We Leave No Data Behind - Data Recovery Specialists, Singapore.\r\n" +
+      "END:VCARD\r\n";
+
+    document.getElementById('saveContactBtn').addEventListener('click', function (e) {
+      e.preventDefault();
+      var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+      if (isIOS) {
+        // iOS Safari recognises text/vcard natively and opens the
+        // "Add Contact" sheet, but only when there is NO download
+        // attribute forcing a file save instead.
+        window.location.href = 'data:text/vcard;charset=utf-8,' + encodeURIComponent(vcard);
+      } else {
+        var blob = new Blob([vcard], { type: 'text/vcard' });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = 'KC-NG.vcf';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+      }
+    });
   </script>
 
 </body>

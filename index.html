@@ -257,7 +257,7 @@
           </ul>
 
           <div class="hero__actions">
-            <a id="saveContactBtn" class="btn btn--primary" href="#">
+            <a class="btn btn--primary" href="kc-ng.vcf" download="KC-NG.vcf">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 19h16"/></svg>
               Save Contact Card
             </a>
@@ -324,7 +324,7 @@
           </div>
           <div class="stat">
             <p class="stat__label">In-House Lab</p>
-            <p class="stat__body">Proprietary tools and engineers, no outsourced recovery work.</p>
+            <p class="stat__body">Proprietary tools and engineers. No outsourced recovery work.</p>
           </div>
           <div class="stat">
             <p class="stat__label">Confidentiality</p>
@@ -350,48 +350,6 @@
     var now = new Date().getFullYear();
     document.getElementById('copyYear').textContent = now;
     document.getElementById('yearsActive').textContent = now - 2012;
-
-    var vcard = "BEGIN:VCARD\r\n" +
-      "VERSION:3.0\r\n" +
-      "N:NG;KC;;;\r\n" +
-      "FN:KC NG\r\n" +
-      "ORG:Ever Higher Data Recovery Centre (EHDR)\r\n" +
-      "TITLE:Business Development Manager\r\n" +
-      "TEL;TYPE=WORK,VOICE:+65 8666 2701\r\n" +
-      "EMAIL;TYPE=WORK:kc.ng@3verhigher.com\r\n" +
-      "URL:https://www.3verhigher.com\r\n" +
-      "ADR;TYPE=WORK:;;221 Henderson Road, #06-02 (Block A);Singapore;;159557;Singapore\r\n" +
-      "NOTE:We Leave No Data Behind - Data Recovery Specialists, Singapore.\r\n" +
-      "END:VCARD\r\n";
-
-    document.getElementById('saveContactBtn').addEventListener('click', function (e) {
-      e.preventDefault();
-      var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-
-      if (isIOS) {
-        // Safari blocks window.location.href navigation to a data:
-        // URI (silently does nothing). Clicking a real <a> element
-        // that points to the data URI is allowed and triggers the
-        // native "Add Contact" sheet, as long as there is no
-        // download attribute forcing a file save instead.
-        var a = document.createElement('a');
-        a.href = 'data:text/vcard;charset=utf-8,' + encodeURIComponent(vcard);
-        a.rel = 'noopener';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-      } else {
-        var blob = new Blob([vcard], { type: 'text/vcard' });
-        var url = URL.createObjectURL(blob);
-        var a = document.createElement('a');
-        a.href = url;
-        a.download = 'KC-NG.vcf';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
-      }
-    });
   </script>
 
 </body>

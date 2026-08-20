@@ -369,10 +369,17 @@
       var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
       if (isIOS) {
-        // iOS Safari recognises text/vcard natively and opens the
-        // "Add Contact" sheet, but only when there is NO download
-        // attribute forcing a file save instead.
-        window.location.href = 'data:text/vcard;charset=utf-8,' + encodeURIComponent(vcard);
+        // Safari blocks window.location.href navigation to a data:
+        // URI (silently does nothing). Clicking a real <a> element
+        // that points to the data URI is allowed and triggers the
+        // native "Add Contact" sheet, as long as there is no
+        // download attribute forcing a file save instead.
+        var a = document.createElement('a');
+        a.href = 'data:text/vcard;charset=utf-8,' + encodeURIComponent(vcard);
+        a.rel = 'noopener';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
       } else {
         var blob = new Blob([vcard], { type: 'text/vcard' });
         var url = URL.createObjectURL(blob);
